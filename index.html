@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <!-- Meta tags-->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="description"
+        content="Bienvenue sur la page d'accueil de Les Petits Plats, le site officiel pour rechercher des recettes culinaires!">
+    <meta name="color-scheme" content="dark light" />
+    <meta name="robots" content="index, follow">
+
+    <!-- Title -->
+    <title>Les Petits Plats - Page de recherche</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="./css/style.css" />
+
+    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&family=DM+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <script src="https://kit.fontawesome.com/904e9ee361.js" crossorigin="anonymous"></script>
+
+    <!-- Page logo -->
+    <link rel="icon" type="image/png" href="assets/logos/icon-logo.png" />
+
+    <!-- JS -->
+    <!-- APIs   -->
+    <script defer src="./js/Apis/recipes-api.js"></script>
+
+    <!-- Utilities   -->
+    <script defer src="./js/Utils/create-tag.js"></script>
+    <script defer src="./js/Utils/dropdown-menu-functions.js"></script>
+    <script defer src="./js/Utils/search-recipe-functions.js"></script>
+    <script defer src="./js/Utils/url-functions.js"></script>
+
+    <!-- Templates   -->
+    <script defer src="./js/Templates/recipe-card-template.js"></script>
+    <script defer src="./js/Templates/tag-template.js"></script>
+    <script defer src="./js/Templates/dropdown-item-template.js"></script>
+
+    <!--  Page  -->
+    <script defer src="./js/pages/index.js"></script>
+
+</head>
+
+<body>
+    <!-- Scroll anchor -->
+    <a class="scroll-anchor" href="#top" title="Revenir en haut de la page?">
+    </a>
+
+
+    <header class="header" role="banner" tabindex="0">
+        <a href="#" title="Retourner à la page d'acceuil?" class="header__link">
+            <svg width="52" height="47" viewBox="0 0 52 47" fill="none" xmlns="http://www.w3.org/2000/svg"
+                class="header__logo">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M39.5083 25.3424V35.1415H12.4024V25.3424C7.99768 25.3424 4.60945 21.9635 4.60945 17.5708C4.60945 13.1781 7.99768 9.79908 12.4024 9.79908C15.4518 9.79908 18.1624 11.4886 19.5177 14.1918L22.9059 12.5023C21.8895 10.8128 20.873 9.12328 19.1789 8.10958C20.5342 5.74429 22.9059 4.05479 25.9553 4.05479C30.36 4.05479 33.7483 7.43378 33.7483 11.8265C33.7483 13.1781 33.4095 14.5297 32.7318 15.8813L36.12 17.9087C37.1365 16.2192 37.8142 14.1918 37.8142 11.8265C37.8142 11.1507 37.8142 10.8128 37.8142 10.137C38.4918 9.79908 39.1695 9.79908 39.8471 9.79908C44.2518 9.79908 47.64 13.1781 47.64 17.5708C47.64 21.9635 43.913 25.3424 39.5083 25.3424ZM39.5083 42.9132H12.4024V39.1963H39.5083V42.9132ZM39.5083 6.08219C38.4918 6.08219 37.4753 6.42009 36.12 6.42009C34.0871 2.70319 30.36 0 25.9553 0C21.5506 0 17.4847 2.36529 15.7906 6.42009C14.7742 6.08219 13.7577 6.08219 12.4024 6.08219C5.96474 6.08219 0.882385 11.1507 0.882385 17.5708C0.882385 22.6393 4.27062 27.0319 8.67533 28.3835V46.2922H43.5742V28.7214C47.9789 27.0319 51.3671 22.9772 51.3671 17.9087C51.3671 11.4886 45.9459 6.08219 39.5083 6.08219ZM22.2283 31.0867H18.5012V23.653H22.2283V31.0867ZM33.7483 31.0867H30.0212V23.653H33.7483V31.0867Z"
+                    fill="#D04F4F" />
+            </svg>
+
+        </a>
+        <h1 class="header__title" id="top">Les petits plats</h1>
+    </header>
+
+    <main class="main-index" role="main" tabindex="0">
+        <div class="main-index__content-container">
+
+            <section class="main-index__input-container" role="region" aria-label="Section de recherche de recette">
+                <form action="#" class="main-index__form">
+                    <input type="text" class="main-index__input" id="search" placeholder="Rechercher une recette"
+                        autocomplete="off" />
+                    <label for="search" class="main-index__label">
+                        <svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            class="main-index__glass-icon-svg search-glass-svg">
+                            <path
+                                d="M23.4167 20.6667H21.9683L21.455 20.1717C23.2517 18.0817 24.3333 15.3683 24.3333 12.4167C24.3333 5.835 18.9983 0.5 12.4167 0.5C5.835 0.5 0.5 5.835 0.5 12.4167C0.5 18.9983 5.835 24.3333 12.4167 24.3333C15.3683 24.3333 18.0817 23.2517 20.1717 21.455L20.6667 21.9683V23.4167L29.8333 32.565L32.565 29.8333L23.4167 20.6667ZM12.4167 20.6667C7.85167 20.6667 4.16667 16.9817 4.16667 12.4167C4.16667 7.85167 7.85167 4.16667 12.4167 4.16667C16.9817 4.16667 20.6667 7.85167 20.6667 12.4167C20.6667 16.9817 16.9817 20.6667 12.4167 20.6667Z"
+                                fill="black" />
+                        </svg>
+                    </label>
+                </form>
+            </section>
+
+            <section class="main-index__tags-container" role="region" aria-label="Section de tags ajoutés">
+                <div class="main-index__tags-for-ingredients main-index__tags-for" data-tag-type="ingredients"></div>
+                <div class="main-index__tags-for-devices main-index__tags-for" data-tag-type="devices"></div>
+                <div class="main-index__tags-for-utensils main-index__tags-for" data-tag-type="utensils"></div>
+                <!--     Template for a singular tag     -->
+                <template>
+                    <div class="main-index__tag main-index__tag--${}-bg">
+                        <p class="main-index__tag-text">${text}</p>
+                        <button class="main-index__tag-close-button">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" class="main-index__tag-close-button-icon-svg">
+                                <path
+                                    d="M12.59 6L10 8.59L7.41 6L6 7.41L8.59 10L6 12.59L7.41 14L10 11.41L12.59 14L14 12.59L11.41 10L14 7.41L12.59 6ZM10 0C4.47 0 0 4.47 0 10C0 15.53 4.47 20 10 20C15.53 20 20 15.53 20 10C20 4.47 15.53 0 10 0ZM10 18C5.59 18 2 14.41 2 10C2 5.59 5.59 2 10 2C14.41 2 18 5.59 18 10C18 14.41 14.41 18 10 18Z"
+                                    fill="white" />
+                            </svg>
+                        </button>
+
+                    </div>
+                </template>
+                <!--          Examples ↓       -->
+                <template>
+                    <div class="main-index__tag main-index__tag--ingredients-bg hide">
+                        <p class="main-index__tag-text">Coco</p>
+                        <button class="main-index__tag-close-button">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" class="main-index__tag-close-button-icon-svg">
+                                <path
+                                    d="M12.59 6L10 8.59L7.41 6L6 7.41L8.59 10L6 12.59L7.41 14L10 11.41L12.59 14L14 12.59L11.41 10L14 7.41L12.59 6ZM10 0C4.47 0 0 4.47 0 10C0 15.53 4.47 20 10 20C15.53 20 20 15.53 20 10C20 4.47 15.53 0 10 0ZM10 18C5.59 18 2 14.41 2 10C2 5.59 5.59 2 10 2C14.41 2 18 5.59 18 10C18 14.41 14.41 18 10 18Z"
+                                    fill="white" />
+                            </svg>
+                        </button>
+
+                    </div>
+
+                    <div class="main-index__tag main-index__tag--devices-bg hide">
+                        <p class="main-index__tag-text">Mixer</p>
+                        <button class="main-index__tag-close-button">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" class="main-index__tag-close-button-icon-svg">
+                                <path
+                                    d="M12.59 6L10 8.59L7.41 6L6 7.41L8.59 10L6 12.59L7.41 14L10 11.41L12.59 14L14 12.59L11.41 10L14 7.41L12.59 6ZM10 0C4.47 0 0 4.47 0 10C0 15.53 4.47 20 10 20C15.53 20 20 15.53 20 10C20 4.47 15.53 0 10 0ZM10 18C5.59 18 2 14.41 2 10C2 5.59 5.59 2 10 2C14.41 2 18 5.59 18 10C18 14.41 14.41 18 10 18Z"
+                                    fill="white" />
+                            </svg>
+                        </button>
+
+                    </div>
+
+                    <div class="main-index__tag main-index__tag--utensils-bg hide">
+                        <p class="main-index__tag-text">Cuillère</p>
+                        <button class="main-index__tag-close-button">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" class="main-index__tag-close-button-icon-svg">
+                                <path
+                                    d="M12.59 6L10 8.59L7.41 6L6 7.41L8.59 10L6 12.59L7.41 14L10 11.41L12.59 14L14 12.59L11.41 10L14 7.41L12.59 6ZM10 0C4.47 0 0 4.47 0 10C0 15.53 4.47 20 10 20C15.53 20 20 15.53 20 10C20 4.47 15.53 0 10 0ZM10 18C5.59 18 2 14.41 2 10C2 5.59 5.59 2 10 2C14.41 2 18 5.59 18 10C18 14.41 14.41 18 10 18Z"
+                                    fill="white" />
+                            </svg>
+                        </button>
+
+                    </div>
+                </template>
+                <!--          Examples ↑        -->
+            </section>
+
+            <section class="main-index__sort-inputs-container">
+                <div class="dropdown-menu dropdown-menu--ingredients" data-search-type="ingredients">
+                    <input type="text" class="dropdown-menu__sort-input dropdown-menu__sort-input--ingredients"
+                        placeholder="Rechercher un ingrédient" value="Ingrédients" name="Ingrédients"
+                        id="sort-by-ingredients">
+                    <label for="sort-by-ingredients" class="dropdown-menu__sort-label">
+
+                        <svg width="16" height="11" viewBox="0 0 16 11" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            class="main-index__sort-label-icon-svg">
+                            <path
+                                d="M14.12 0.453369L8 6.56004L1.88 0.453369L0 2.33337L8 10.3334L16 2.33337L14.12 0.453369Z"
+                                fill="white" />
+                        </svg>
+                    </label>
+                    <ul class="dropdown-menu__options dropdown-menu__options--ingredients hide">
+                    </ul>
+                </div>
+
+                <div class="dropdown-menu dropdown-menu--devices" data-search-type="devices">
+                    <input type="text" class="dropdown-menu__sort-input dropdown-menu__sort-input--devices"
+                        placeholder="Rechercher un appareil" value="Appareils" name="Appareils" id="sort-by-devices">
+                    <label for="sort-by-devices" class="dropdown-menu__sort-label">
+                        <svg width="16" height="11" viewBox="0 0 16 11" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            class="main-index__sort-label-icon-svg">
+                            <path
+                                d="M14.12 0.453369L8 6.56004L1.88 0.453369L0 2.33337L8 10.3334L16 2.33337L14.12 0.453369Z"
+                                fill="white" />
+                        </svg>
+
+                    </label>
+                    <ul class="dropdown-menu__options dropdown-menu__options--devices hide">
+                    </ul>
+                </div>
+
+                <div class="dropdown-menu dropdown-menu--utensils" data-search-type="utensils">
+                    <input type="text" class="dropdown-menu__sort-input dropdown-menu__sort-input--utensils"
+                        placeholder="Rechercher un ustensil" value="Ustensils" name="Ustensils" id="sort-by-utensils">
+                    <label for="sort-by-utensils" class="dropdown-menu__sort-label">
+                        <svg width="16" height="11" viewBox="0 0 16 11" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            class="main-index__sort-label-icon-svg">
+                            <path
+                                d="M14.12 0.453369L8 6.56004L1.88 0.453369L0 2.33337L8 10.3334L16 2.33337L14.12 0.453369Z"
+                                fill="white" />
+                        </svg>
+
+                    </label>
+                    <ul class="dropdown-menu__options dropdown-menu__options--utensils hide">
+                    </ul>
+                </div>
+            </section>
+
+            <section class="main-index__cards-found-container" role="region" aria-label="Nombre de résultats">
+                <p class="main-index__cards-found-paragraph hide">Recettes trouvées:</p>
+            </section>
+
+            <section class="main-index__recipes-container" role="region" aria-label="Recettes de cuisine">
+
+                <!-- Template for a singular recipe card -->
+                <template>
+                    <div class="recipe-card" data-id="${id}" data-name="${name}" data-servings="${servings}"
+                        data-utensils='${ustensils}' data-devices="${appliance}" title="${description}">
+                        <div class="recipe-card__image-container"></div>
+                        <div class="recipe-card__text-container">
+                            <div class="recipe-card__title-prep-time">
+                                <h2 class="recipe-card__recipe-name">${}</h2>
+                                <p class="recipe-card__recipe-prep-time">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg" class="clock-svg">
+                                        <path
+                                            d="M10 0C4.5 0 0 4.5 0 10C0 15.5 4.5 20 10 20C15.5 20 20 15.5 20 10C20 4.5 15.5 0 10 0ZM10 18C5.59 18 2 14.41 2 10C2 5.59 5.59 2 10 2C14.41 2 18 5.59 18 10C18 14.41 14.41 18 10 18ZM10.5 5H9V11L14.2 14.2L15 12.9L10.5 10.2V5Z"
+                                            fill="black" />
+                                    </svg>
+                                    ${}
+                                </p>
+                            </div>
+                            <div class="recipe-card__ingredients-instructions">
+                                <ul class="recipe-card__ingredients-list">
+
+                                    <li class="recipe-card__ingredient-item">
+                                        <span class="recipe-card__ingredient-item-name">${}:</span>
+                                        ${}
+                                    </li>
+                                </ul>
+                                <p class="recipe-card__instructions">${}</p>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+                <!--  -->
+                <template>
+                    <!-- Example -->
+                    <div class="recipe-card" data-id="${id}" data-name="${name}" data-servings="${servings}"
+                        data-utensils='${ustensils}' data-devices="${appliance}" title="${description}">
+                        <div class="recipe-card__image-container"></div>
+                        <div class="recipe-card__text-container">
+                            <div class="recipe-card__title-prep-time">
+                                <h2 class="recipe-card__recipe-name">Limonade de coco</h2>
+                                <p class="recipe-card__recipe-prep-time">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg" class="clock-svg">
+                                        <path
+                                            d="M10 0C4.5 0 0 4.5 0 10C0 15.5 4.5 20 10 20C15.5 20 20 15.5 20 10C20 4.5 15.5 0 10 0ZM10 18C5.59 18 2 14.41 2 10C2 5.59 5.59 2 10 2C14.41 2 18 5.59 18 10C18 14.41 14.41 18 10 18ZM10.5 5H9V11L14.2 14.2L15 12.9L10.5 10.2V5Z"
+                                            fill="black" />
+                                    </svg>
+                                    10 min
+                                </p>
+                            </div>
+                            <div class="recipe-card__ingredients-instructions">
+                                <ul class="recipe-card__ingredients-list">
+                                    <li class="recipe-card__ingredient-item"> <span
+                                            class="recipe-card__ingredient-item-name">Lait de coco:</span> 400ml</li>
+                                    <li class="recipe-card__ingredient-item"><span
+                                            class="recipe-card__ingredient-item-name">Citrons:</span> 2</li>
+                                    <li class="recipe-card__ingredient-item"> <span
+                                            class="recipe-card__ingredient-item-name">Crème de coco:</span> 4 cuillères
+                                    </li>
+                                    <li class="recipe-card__ingredient-item"><span
+                                            class="recipe-card__ingredient-item-name">Sucre:</span> 20g</li>
+                                    <li class="recipe-card__ingredient-item"><span
+                                            class="recipe-card__ingredient-item-name">Glaçons</span> 2</li>
+                                </ul>
+
+                                <p class="recipe-card__instructions">Mettre les glaçons à votre goût dans le blender,
+                                    ajouter le
+                                    lait, la crème de coco, le jus de 2 citrons et le sucre.
+                                    Mixer jusqu'à avoir la consistence désirée.</p>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+
+
+
+                <!--  -->
+
+            </section>
+            <section class="recipe-card__not-found">
+                <p class="recipe-card__not-found-message"></p>
+            </section>
+
+        </div>
+    </main>
+</body>
+
+</html>
