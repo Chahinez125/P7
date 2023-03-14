@@ -5,6 +5,7 @@ import {
   displayApp,
   displayUst,
 } from "./display.js";
+
 //varriables
 const main = document.querySelector("#main");
 const ul_igr = document.querySelector("#list_igr");
