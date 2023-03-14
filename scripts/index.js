@@ -130,6 +130,7 @@ const search_method = async (tag) => {
 };
 
 // ---- au input: Lancer la recherche principale ----
+
 const tag_search = document.querySelector("#search_barre");
 tag_search.addEventListener("input", async () => {
   search_method(tag_search.value);
