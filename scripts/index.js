@@ -31,6 +31,7 @@ const getIngredients = async (recipes) => {
 };
 
 // ---- Récupération des ustensils ----
+
 const getUstensiles = async (recipes) => {
   let tab = [];
   recipes.forEach((recipe) => {
