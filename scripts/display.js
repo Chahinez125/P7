@@ -1,6 +1,6 @@
 const main = document.querySelector("#main");
 
-// display data
+// ---- affichage des articles qui contient les recettes ----
 export const displayData = (recettes) => {
   recettes.forEach((recette) => {
     const article = document.createElement("article");
@@ -19,7 +19,7 @@ export const displayData = (recettes) => {
     card_body.style.background = "#E7E7E7";
     card_body.style.paddingBottom = "0";
 
-    // name+time
+    // div name+time
     const div_card_title = document.createElement("div");
     div_card_title.classList.add("card-title");
     div_card_title.classList.add("row");
@@ -39,7 +39,7 @@ export const displayData = (recettes) => {
     div_card_title.appendChild(name_recipe);
     div_card_title.appendChild(time_recipe);
 
-    // div card text
+    // div text
     const div_card_text = document.createElement("div");
     div_card_text.classList.add("row");
     div_card_text.style.fontSize = "0.85rem";
@@ -52,7 +52,7 @@ export const displayData = (recettes) => {
     div_desc.classList.add("col-5");
     div_desc.classList.add("p-1");
 
-    // ingrediants
+    // ingrédients
     const ingredients_list = document.createElement("ul");
     ingredients_list.classList.add("list-unstyled");
     recette.ingredients.forEach((igd) => {
@@ -93,7 +93,7 @@ export const displayData = (recettes) => {
   });
 };
 
-// list ingredients
+// ---- affichage de liste des ingredients ----
 const btnIngredient = document.querySelector("#btn_igr");
 const ingredients_list = document.querySelector("#list_igr");
 const igrClose = document.querySelector(".igr_close");
@@ -120,7 +120,7 @@ export const displayIngredient = async (tab) => {
   }
 };
 
-// list ustensils
+// ---- affichage de liste des ustensils ----
 const btnUstensils = document.querySelector("#btn_ust");
 const ustensiles_list = document.querySelector("#list_ust");
 const ustClose = document.querySelector(".ust_close");
@@ -147,7 +147,7 @@ export const displayUst = async (tab) => {
   }
 };
 
-// list appliances
+// ---- Affichage de liste des appareils
 const btnAppliance = document.querySelector("#btn_app");
 const appareils_list = document.querySelector("#list_app");
 const appClose = document.querySelector(".app_close");
@@ -172,6 +172,8 @@ export const displayApp = async (tab) => {
     appareils_list.appendChild(appareil_list);
   }
 };
+
+// ---- Ouverture des listes ----
 const igr = document.querySelector("#igr");
 const app = document.querySelector("#app");
 const ust = document.querySelector("#ust");
@@ -206,6 +208,7 @@ btnAppliance.addEventListener("click", () => {
   btnUstensils.style.marginLeft = "0px";
 });
 
+// ---- la fermeture des listes ----
 igrClose.addEventListener("click", () => {
   igr.style.display = "none";
   btnIngredient.style.display = "block";

@@ -5,65 +5,61 @@ import {
   displayApp,
   displayUst,
 } from "./display.js";
-
-// varriables
+//varriables
 const main = document.querySelector("#main");
-const search = document.querySelector("#rechercher-une-recette");
-const tag_search = document.querySelector("#search_barre");
-let tag = [];
-// function get ingredients
+const ul_igr = document.querySelector("#list_igr");
+const ul_ust = document.querySelector("#list_ust");
+const ul_app = document.querySelector("#list_app");
+
+// ---- Recupération des ingredients ----
 const getIngredients = async (recipes) => {
   let tab = [];
-  for (let recipe of recipes) {
-    for (let igr of recipe.ingredients) {
-      // Eviter affichage double d'un ingredient
-      // Eviter affichage d'un ingredient a la fois au singulier et au oluriel
+  recipes.forEach((recipe) => {
+    recipe.ingredients.forEach((igd) => {
       if (
-        !tab.includes(igr.ingredient.toUpperCase()) &&
+        !tab.includes(igd.ingredient.toUpperCase()) &&
         !tab.includes(
-          igr.ingredient.toUpperCase().substring(0, igr.ingredient.length - 1)
+          igd.ingredient.toUpperCase().substring(0, igd.ingredient.length - 1)
         )
       ) {
-        tab.push(igr.ingredient.toUpperCase());
+        tab.push(igd.ingredient.toUpperCase());
       }
-    }
-  }
+    });
+  });
   return tab;
 };
 
-// get ustensils
+// ---- Récupération des ustensils ----
 const getUstensiles = async (recipes) => {
   let tab = [];
-  for (let recipe of recipes) {
-    for (let ust of recipe.ustensils) {
+  recipes.forEach((recipe) => {
+    recipe.ustensils.forEach((ust) => {
       if (!tab.includes(ust.toUpperCase())) {
         tab.push(ust.toUpperCase());
       }
-    }
-  }
-
+    });
+  });
   return tab;
 };
 
-//get appliance
+// ---- Récupération des appareil ----
 const getAppareil = async (recipes) => {
   let tab = [];
-  for (let recipe of recipes) {
+  recipes.forEach((recipe) => {
     if (!tab.includes(recipe.appliance.toUpperCase())) {
       tab.push(recipe.appliance.toUpperCase());
     }
-  }
+  });
   return tab;
 };
 
-// appel de fonctions
+// ---- Appel les fonctions d'affichage ----
 const init = async (recipes) => {
-  // affichage des recettes
   displayData(recipes);
   let tab1 = await getIngredients(recipes);
   let tab2 = await getUstensiles(recipes);
   let tab3 = await getAppareil(recipes);
-  // Retirer le tag de la liste des recherche avancée
+  // Retirer le tag de la liste des recherches avancées
   if (tag.length > 0) {
     for (let t of tag) {
       if (tab1.includes(t.toUpperCase())) {
@@ -71,21 +67,22 @@ const init = async (recipes) => {
         tab1.splice(tagIndex, 1);
       }
       if (tab2.includes(t.toUpperCase())) {
-        let tagIndex = tab2.indexOf(t.toUpperCase());
+        let tagIndex = tab1.indexOf(t.toUpperCase());
         tab2.splice(tagIndex, 1);
       }
       if (tab3.includes(t.toUpperCase())) {
-        let tagIndex = tab3.indexOf(t.toUpperCase());
+        let tagIndex = tab1.indexOf(t.toUpperCase());
         tab3.splice(tagIndex, 1);
       }
     }
   }
-
+  // Si le resultat n'affiche qu'une seul recette => fin de recherche
   if (newArrayRecipe.length == 1) {
     tab1 = [];
     tab2 = [];
     tab3 = [];
   }
+  // actualisé les liste des recherches avancé en fonction des resultats affichés
   ul_igr.innerHTML = "";
   ul_app.innerHTML = "";
   ul_ust.innerHTML = "";
@@ -95,8 +92,8 @@ const init = async (recipes) => {
 };
 init(recipes);
 
-// Recherch principal avec "for"
-const searchPrincipale = async (tag) => {
+// ---- Recheche Principale ----
+const search_method = async (tag) => {
   let recipes_try = [];
   let array = [];
   if (tag.length > 0) {
@@ -105,28 +102,15 @@ const searchPrincipale = async (tag) => {
     } else if (newArrayRecipe.length > 0) {
       array = newArrayRecipe;
     }
-    for (let recipe of array) {
-      for (let igr of recipe.ingredients) {
-        if (igr.ingredient.toLocaleLowerCase().includes(tag.toLowerCase())) {
-          if (!recipes_try.includes(recipe)) {
-            recipes_try.push(recipe);
-          }
-        }
-      }
-      if (recipe.name.toLocaleLowerCase().includes(tag.toLowerCase())) {
-        if (!recipes_try.includes(recipe)) {
-          recipes_try.push(recipe);
-        }
-      }
-      if (
-        recipe.description.toLocaleLowerCase().includes(tag.toLowerCase() + " ")
-      ) {
-        if (!recipes_try.includes(recipe)) {
-          recipes_try.push(recipe);
-        }
-      }
-    }
-  } else if (tag.length <= 0) {
+    recipes_try = array.filter(
+      (recipe) =>
+        recipe.name.toLowerCase().includes(tag.toLowerCase()) ||
+        recipe.description.toLowerCase().includes(tag.toLowerCase()) ||
+        recipe.ingredients.some((rcp) =>
+          rcp.ingredient.toLowerCase().includes(tag.toLowerCase())
+        )
+    );
+  } else if (tag.length == 0) {
     recipes_try = recipes;
   }
   main.innerHTML = "";
@@ -135,33 +119,59 @@ const searchPrincipale = async (tag) => {
     ul_app.innerHTML = "";
     ul_ust.innerHTML = "";
     init(recipes_try);
-  } else {
+  } else if (recipes_try.length == 0) {
     main.innerHTML = `<div><p class='text-danger'> Aucune recette ne correspond à votre critère… vous pouvez
     chercher « tarte aux pommes », « poisson », etc.</div>`;
   }
+
   return recipes_try;
 };
 
-// addEventListener
-
-// lancer la recherche en click sur la loop
-search.addEventListener("click", () => {
-  if (tag_search.value.length > 2) {
-    searchPrincipale(tag_search.value);
-  } else {
-    alert("Veuillez entrer au moins 3 charactéres");
-    tag_search.value = "";
-  }
-});
-// lancer la recherche pour chaque nouveau caractéres
+// ---- au input: Lancer la recherche principale ----
+const tag_search = document.querySelector("#search_barre");
 tag_search.addEventListener("input", async () => {
-  searchPrincipale(tag_search.value);
-  newArrayRecipe = await searchPrincipale(tag_search.value);
+  search_method(tag_search.value);
+  newArrayRecipe = await search_method(tag_search.value);
 });
 
-//input ingredient
+// ---- Fonction Tri de recherche avancé ----
+let newRecipes = [];
+async function tri(tag, array) {
+  let tab1 = await getIngredients(array);
+  let tab2 = await getAppareil(array);
+  let tab3 = await getUstensiles(array);
+  console.log(tag);
+  tag.forEach((t) => {
+    if (tab1.includes(t.toUpperCase())) {
+      console.log("1");
+      newRecipes = array.filter((recipe) =>
+        recipe.ingredients.some((rcp) =>
+          rcp.ingredient.toLowerCase().includes(t.toLowerCase())
+        )
+      );
+    }
+    if (tab3.includes(t.toUpperCase())) {
+      console.log("2");
+      newRecipes = array.filter((recipe) =>
+        recipe.ustensils.some((ust) =>
+          ust.toLowerCase().includes(t.toLowerCase())
+        )
+      );
+    }
+    if (tab2.includes(t.toUpperCase())) {
+      console.log("3");
+      newRecipes = array.filter((recipe) =>
+        recipe.appliance.toLowerCase().includes(t.toLowerCase())
+      );
+    }
+  });
+  console.log(newRecipes);
+  return newRecipes;
+}
+
+// ---- les recherches avancées: utilisation d'input ----
+// filtrer les ingrédient au input
 const inputIgr = document.querySelector("#input_igr");
-const ul_igr = document.querySelector("#list_igr");
 inputIgr.addEventListener("input", async (e) => {
   let tab1 = [];
   if (newArrayRecipe.length == 0) {
@@ -171,11 +181,7 @@ inputIgr.addEventListener("input", async (e) => {
   }
   let tab2 = [];
   if (e.target.value.length > 0) {
-    for (let i = 0; i < tab1.length; i++) {
-      if (tab1[i].includes(e.target.value.toUpperCase())) {
-        tab2.push(tab1[i]);
-      }
-    }
+    tab2 = tab1.filter((tab) => tab.includes(e.target.value.toUpperCase()));
   } else {
     tab2 = tab1;
   }
@@ -183,18 +189,18 @@ inputIgr.addEventListener("input", async (e) => {
   displayIngredient(tab2);
 });
 
-//input appliance
+// filtrer les apareils au input
 const inputApp = document.querySelector("#input_app");
-const ul_app = document.querySelector("#list_app");
 inputApp.addEventListener("input", async (e) => {
-  const tab1 = await getAppareil(recipes);
+  let tab1 = [];
+  if (newArrayRecipe.length == 0) {
+    tab1 = await getAppareil(recipes);
+  } else {
+    tab1 = await getAppareil(newArrayRecipe);
+  }
   let tab2 = [];
   if (e.target.value.length > 0) {
-    for (let i = 0; i < tab1.length; i++) {
-      if (tab1[i].includes(e.target.value.toUpperCase())) {
-        tab2.push(tab1[i]);
-      }
-    }
+    tab2 = tab1.filter((tab) => tab.includes(e.target.value.toUpperCase()));
   } else {
     tab2 = tab1;
   }
@@ -202,9 +208,8 @@ inputApp.addEventListener("input", async (e) => {
   displayApp(tab2);
 });
 
-//input ustensils
+// filtrer les ustensils par input
 const inputust = document.querySelector("#input_ust");
-const ul_ust = document.querySelector("#list_ust");
 inputust.addEventListener("input", async (e) => {
   let tab1 = [];
   if (newArrayRecipe.length == 0) {
@@ -214,11 +219,7 @@ inputust.addEventListener("input", async (e) => {
   }
   let tab2 = [];
   if (e.target.value.length > 0) {
-    for (let i = 0; i < tab1.length; i++) {
-      if (tab1[i].includes(e.target.value.toUpperCase())) {
-        tab2.push(tab1[i]);
-      }
-    }
+    tab2 = tab1.filter((tab) => tab.includes(e.target.value.toUpperCase()));
   } else {
     tab2 = tab1;
   }
@@ -226,108 +227,69 @@ inputust.addEventListener("input", async (e) => {
   displayUst(tab2);
 });
 
-//lancer la recherche avancé avec le tag
-
+// ---- les recherches avancées: au click ----
+// varriables
+const listIng = document.querySelector("#igr");
+const listApp = document.querySelector("#app");
+const listUst = document.querySelector("#ust");
+const btnIng = document.querySelector("#btn_igr");
+const btnAppliance = document.querySelector("#btn_app");
+const btnUstensils = document.querySelector("#btn_ust");
+const keyword = document.querySelector("#tag");
+const keyWordDiv = document.createElement("div");
+keyword.appendChild(keyWordDiv);
+let tag = [];
 let arrayRecipe = [];
 let newArrayRecipe = [];
-let keyword = document.querySelector("#tag");
 
-const listIng = document.querySelector("#igr");
-const listUst = document.querySelector("#ust");
-const listApp = document.querySelector("#app");
-const btnIng = document.querySelector("#btn_igr");
-const btnApp = document.querySelector("#btn_app");
-const btnUst = document.querySelector("#btn_ust");
-
-// Recherche avancé par ingrédients
+// Filtrer les ingrédient au click
 ul_igr.addEventListener("click", async (e) => {
-  btnApp.style.marginLeft = "0px";
-  btnUst.style.marginLeft = "0px";
+  // Manipulation d'interface
+  btnAppliance.style.marginLeft = "0px";
+  btnUstensils.style.marginLeft = "0px";
   listIng.style.display = "none";
   btnIng.style.display = "block";
-  console.log(document.getElementById(e.target.id));
+  // insertion du tag a la DOM
+  console.log(e.target.id);
   tag.push(e.target.id);
-
-  keyword.innerHTML += `<div class="btn btn-primary m-1">
+  keyWordDiv.innerHTML += `<div class="btn btn-primary m-1">
        ${e.target.id}<span class="close"><i class="bi bi-x-circle"></i><span></div>`;
-
+  // Moteur de recherche
   if (newArrayRecipe.length == 0) {
-    for (let recipe of recipes) {
-      for (let igr of recipe.ingredients) {
-        if (
-          igr.ingredient
-            .toLowerCase()
-            .includes(tag[tag.length - 1].toLowerCase())
-        ) {
-          newArrayRecipe.push(recipe);
-        }
-      }
-    }
-    console.log(newArrayRecipe);
-  } else if (newArrayRecipe.length > 0) {
-    let array = [];
-    for (let recipe of newArrayRecipe) {
-      for (let igr of recipe.ingredients) {
-        if (
-          igr.ingredient
-            .toLowerCase()
-            .includes(tag[tag.length - 1].toLowerCase()) &&
-          !array.includes(recipe)
-        ) {
-          array.push(recipe);
-        }
-      }
-      newArrayRecipe = array;
-    }
-    console.log(newArrayRecipe);
+    newArrayRecipe = await tri(tag, recipes);
+  } else {
+    newArrayRecipe = await tri(tag, newArrayRecipe);
   }
+  console.log(newArrayRecipe);
   arrayRecipe = newArrayRecipe;
+  // Manipuler la DOM pour afficher les nouveaux resultat
   main.innerHTML = "";
   ul_igr.innerHTML = "";
   ul_ust.innerHTML = "";
   ul_app.innerHTML = "";
-
   init(arrayRecipe);
 });
 
-// Recherche avancée par ustensils
-ul_ust.addEventListener("click", (e) => {
+// Filtrer les ustensils au click
+ul_ust.addEventListener("click", async (e) => {
+  // Manipulation d'interface
   listUst.style.display = "none";
-  btnUst.style.display = "block";
+  btnUstensils.style.display = "block";
+  // Insertion des tag dans la DOM
   console.log(e.target.id);
   tag.push(e.target.id);
-  keyword.innerHTML += `<div class="btn m-1" style="background:#ED6454;color:white">
+  keyWordDiv.innerHTML += `<div class="btn m-1" style="background:#ED6454;color:white">
        ${e.target.id}<span class="close"><i class="bi bi-x-circle"></i><span></div>`;
 
+  // Moteur de recherche
   if (newArrayRecipe.length == 0) {
-    console.log("1");
-    for (let recipe of recipes) {
-      for (let ust of recipe.ustensils) {
-        if (ust.toLowerCase().includes(tag[tag.length - 1].toLowerCase())) {
-          newArrayRecipe.push(recipe);
-        }
-      }
-    }
-    console.log(newArrayRecipe);
-    arrayRecipe = newArrayRecipe;
-    //   console.log(newArrayRecipe);
+    newArrayRecipe = await tri(tag, recipes);
   } else {
-    let array = [];
-    for (let recipe of newArrayRecipe) {
-      for (let ust of recipe.ustensils) {
-        if (
-          ust.toLowerCase().includes(tag[tag.length - 1].toLowerCase()) &&
-          !array.includes(recipe)
-        ) {
-          array.push(recipe);
-        }
-      }
-      newArrayRecipe = array;
-    }
-
-    console.log(newArrayRecipe);
+    newArrayRecipe = await tri(tag, newArrayRecipe);
   }
+  console.log(newArrayRecipe);
   arrayRecipe = newArrayRecipe;
+  // Actualisé avec le nouveau resultat
   main.innerHTML = "";
   ul_igr.innerHTML = "";
   ul_ust.innerHTML = "";
@@ -335,42 +297,20 @@ ul_ust.addEventListener("click", (e) => {
   init(arrayRecipe);
 });
 
-// Recherche avancée par appliance
-ul_app.addEventListener("click", (e) => {
+// Filtrer les apareils au click
+ul_app.addEventListener("click", async (e) => {
   listApp.style.display = "none";
-  btnApp.style.display = "block";
+  btnAppliance.style.display = "block";
   console.log(e.target.id);
   tag.push(e.target.id);
-  keyword.innerHTML += `<div class="btn m-1" style="background:#68D9A4;color:white">
+  keyWordDiv.innerHTML += `<div class="btn m-1" style="background:#68D9A4;color:white">
        ${e.target.id}<span class="close"><i class="bi bi-x-circle"></i><span></div>`;
   if (newArrayRecipe.length == 0) {
-    for (let recipe of recipes) {
-      if (
-        recipe.appliance
-          .toLowerCase()
-          .includes(tag[tag.length - 1].toLowerCase())
-      ) {
-        newArrayRecipe.push(recipe);
-      }
-    }
-    console.log(newArrayRecipe);
-    arrayRecipe = newArrayRecipe;
+    newArrayRecipe = await tri(tag, recipes);
   } else {
-    let array = [];
-    for (let recipe of newArrayRecipe) {
-      if (
-        recipe.appliance
-          .toLowerCase()
-          .includes(tag[tag.length - 1].toLowerCase()) &&
-        !array.includes(recipe)
-      ) {
-        array.push(recipe);
-      }
-      newArrayRecipe = array;
-    }
-
-    console.log(newArrayRecipe);
+    newArrayRecipe = await tri(tag, newArrayRecipe);
   }
+  console.log(newArrayRecipe);
   arrayRecipe = newArrayRecipe;
   main.innerHTML = "";
   ul_igr.innerHTML = "";
@@ -379,12 +319,17 @@ ul_app.addEventListener("click", (e) => {
   init(arrayRecipe);
 });
 
-// Retirer le tag
-keyword.addEventListener("click", (e) => {
-  if (e.target.classList.contains("bi")) {
+// ---- Retirer les tags ----
+keyword.addEventListener("click", async (e) => {
+  if (e.target.classList.contains("bi-x-circle")) {
     let indexTag = tag.indexOf(e.target.innerText);
     tag.splice(indexTag, 1);
     e.target.parentElement.parentElement.remove();
+    //keyWordDiv.innerHTML = "";
+    console.log(newArrayRecipe);
+    newArrayRecipe = await tri(tag, recipes);
+    console.log(newArrayRecipe);
+    init(newArrayRecipe);
     if (tag.length == 0) {
       init(recipes);
       newArrayRecipe = [];
