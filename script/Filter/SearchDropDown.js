@@ -139,7 +139,7 @@ export default class SearchDropDown {
 
       currentTag.innerHTML += tagBadge;
       // je recupère la liste filtrée et j'enlève les doublons
-      this.filtred = [...this. filterCrossBadgesInput()];
+      this.filtred = [...this.filterCrossBadgesInput()];
       this.filtred = [...new Set(this.filtred)];
 
       // mise à jour de la liste
@@ -152,7 +152,7 @@ export default class SearchDropDown {
    * @param {string} type
    */
   removeBagde(type) {
-    if (TAGS.length == 0) this. filterCrossBadgesInput();
+    if (TAGS.length == 0) this.filterCrossBadgesInput();
 
     const close = document.getElementsByClassName(`fa-times-circle`);
     for (let closeItem of close) {
@@ -168,11 +168,11 @@ export default class SearchDropDown {
         // appel des CARD avec des fonctions filtrer par rapport au tags selectionné / Je boucle sur toute les recipes et je regarde si
         //recipies.ingredient inclus dans tableau des tags view card avec filerRecipes
 
-        this.filtred = [...this. filterCrossBadgesInput()];
+        this.filtred = [...this.filterCrossBadgesInput()];
         this.filtred = [...new Set(this.filtred)];
 
         e.currentTarget.parentNode.remove();
-        this. filterCrossBadgesInput();
+        this.filterCrossBadgesInput();
 
         this.buildNewListRecipes(this.filtred, type);
       });
@@ -280,9 +280,9 @@ export default class SearchDropDown {
       });
 
       // je croise la liste avec le resultat précedent pour affiner la recherche
-        filteredRecipes = new Set(
+      filteredRecipes = new Set(
         [...foundedRecipes].filter((recipe) => filteredRecipes.has(recipe))
-        );
+      );
 
     });
 
